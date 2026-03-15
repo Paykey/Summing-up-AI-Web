@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 
@@ -34,4 +35,21 @@ def recieve_photo(photo: UploadFile = File(...)):
     return {
         "status": "성공",
         "message": f"'{photo.filename}' 사진이 성공적으로 업로드되었습니다."
+    }
+    
+# 가짜 ai 
+@app.post("/analyze")
+async def analyze_data(file: UploadFile = File(...)):
+    # 1. 파일 이름 출력 (터미널 확인용)
+    print(f"업로드된 파일: {file.filename}")
+    
+    # 2. AI가 열심히 분석하는 척 3초 기다리기
+    await asyncio.sleep(3)
+    
+    # 3. 가짜 AI 분석 결과 반환
+    return {
+        "status": "success",
+        "message": "AI 분석이 완료되었습니다.",
+        "filename": file.filename,
+        "ai_result": "정상 판정 (확률: 98%)" # 나중에 진짜 AI 결과가 들어갈 자리
     }
