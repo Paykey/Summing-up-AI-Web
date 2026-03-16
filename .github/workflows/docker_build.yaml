@@ -1,0 +1,16 @@
+name: Docker Build Test
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. 내 깃허브 코드 가져오기
+        uses: actions/checkout@v3
+
+      - name: 2. 도커 Build
+        run: docker build -t my-fastapi-app .
