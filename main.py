@@ -3,10 +3,12 @@ import asyncio
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv() # .env 파일에 있는 환경변수 불러오기
 
 app = FastAPI()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.get("/")
 def root():
@@ -41,19 +43,25 @@ def recieve_photo(photo: UploadFile = File(...)):
         "message": f"'{photo.filename}' 사진이 성공적으로 업로드되었습니다."
     }
     
-# 가짜 ai 
-@app.post("/analyze")
-async def analyze_data(file: UploadFile = File(...)):
-    # 1. 파일 이름 출력 (터미널 확인용)
-    print(f"업로드된 파일: {file.filename}")
+
+# 프론트엔드(사용자)가 보낼 데이터 형식
+class SummaryRequest(BaseModel):
+    text: str
+
+# 요약 요청을 처리하는 API 엔드포인트
+# 프론트엔드에서 긴 텍스트를 보내면, OpenAI API를 호출하여 요약된 결과 반환
+@app.post("/summarize")
+async def summarize_text(request: SummaryRequest):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo", 
+        messages=[
+            # system: AI의 역할(페르소나)을 부여
+            {"role": "system", "content": "너는 대학생의 전공 강의자료를 핵심만 3줄로 요약해 주는 역할이야. 반드시 한국어로 대답해."},
+            # user: 사용자가 실제로 보낸 긴 텍스트
+            {"role": "user", "content": request.text}
+        ]
+    )
     
-    # 2. AI가 열심히 분석하는 척 3초 기다리기
-    await asyncio.sleep(3)
-    
-    # 3. 가짜 AI 분석 결과 반환
-    return {
-        "status": "success",
-        "message": "AI 분석이 완료되었습니다.",
-        "filename": file.filename,
-        "ai_result": "정상 판정 (확률: 98%)" # 나중에 진짜 AI 결과가 들어갈 자리
-    }
+    # AI의 응답에서 요약된 텍스트를 추출하여 프론트엔드에 반환
+    # response.choices[0].message.content -> AI가 생성한 요약 텍스트
+    return {"summary": response.choices[0].message.content}
