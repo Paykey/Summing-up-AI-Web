@@ -70,7 +70,7 @@ class SummaryRequest(BaseModel):
 async def summarize_text(request: SummaryRequest):
     # 모델에 전달할 역할/출력 형식 지시문 + 사용자 원문 결합
     prompt = (
-        "너는 대학생의 전공 강의자료를 핵심만 3줄로 요약해 주는 역할이야. "
+        "너는 자료를 핵심만 3줄로 요약해 주는 역할이야. "
         "반드시 한국어로 대답하고, 각 줄은 간결하게 작성해.\n\n"
         f"[강의자료]\n{request.text}"
     )

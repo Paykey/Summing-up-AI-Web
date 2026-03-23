@@ -8,6 +8,10 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # 깃허브 저장소에 커밋할 수 있는 권한을 부여 (자동 배포를 위해 필요)
+
     steps:
       # 1. GitHub에서 최신 코드 가져오기
       - name: Checkout code
