@@ -3,7 +3,8 @@ name: Build and Push Docker Image
 on:
   push:
     branches: ["main"] # main 브랜치에 코드가 올라올 때만 작동
-
+    paths-ignore: # 무한루프 방지
+      - "k8s/**"
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -25,5 +26,17 @@ jobs:
         with:
           context: .
           push: true
-          # 태그 이름: [내아이디]/basicweb:latest
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/basicweb:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/basicweb:${{ github.sha }}
+
+      # 4. GitOps: ArgoCD가 눈치채도록 deployment.yaml 파일 수정 및 푸시
+      - name: Update Kubernetes deployment.yaml
+        run: |
+          # 파일 안의 image: 부분을 방금 만든 새 이미지 태그로 바꿔치기 (sed 명령어)
+          sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/basicweb:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/basicweb:${{ github.sha }}|g" k8s/deployment.yaml
+
+          # 봇 이름으로 깃허브에 다시 커밋하고 푸시
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add k8s/deployment.yaml
+          git commit -m "🚀 자동 배포: 이미지 태그 ${{ github.sha }} 로 업데이트"
+          git push
