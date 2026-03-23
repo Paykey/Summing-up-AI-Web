@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basicweb-deployment
+spec:
+  replicas: 1 # 서버 하나만 띄우기
+  selector:
+    matchLabels:
+      app: basicweb
+  template:
+    metadata:
+      labels:
+        app: basicweb
+    spec:
+      containers:
+        - name: basicweb-container
+          image: paykey/basicweb:latest
+          ports:
+            - containerPort: 8000 # 컨테이너 내부에서 8000번 포트로 통신
