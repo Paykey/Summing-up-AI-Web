@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: basicweb-container
-          image: paykey/basicweb:ccde80edc439913c1c2f73b7423c7348e06aa537
+          image: paykey/basicweb:ab19902ddad450df8a54e99eae4acd229f35afd5
           ports:
             - containerPort: 8000 # 컨테이너 내부에서 8000번 포트로 통신
