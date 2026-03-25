@@ -24,15 +24,11 @@
       <!-- 사용자 입력 영역 -->
       <section class="panel" aria-labelledby="input-title">
         <h2 id="input-title">요약할 파일 업로드</h2>
-        <div class="file-upload-wrap">
-          <input
-            id="lectureFile"
-            class="file-input-hidden"
-            type="file"
-            accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-          />
-          <label for="lectureFile" class="file-upload-btn">파일 선택하기</label>
-        </div>
+        <input
+          id="lectureFile"
+          type="file"
+          accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        />
         <div class="actions">
           <button id="summarizeBtn" type="button">파일 요약하기</button>
           <span id="status" class="status" aria-live="polite"></span>
