@@ -1,19 +1,28 @@
+# Deployment 리소스: 애플리케이션 파드의 원하는 상태를 선언
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # 배포 리소스 이름
   name: basicweb-deployment
 spec:
+  # 동일한 파드 복제 개수
   replicas: 1 # 서버 하나만 띄우기
   selector:
+    # Deployment가 관리할 파드를 식별하는 라벨 셀렉터
     matchLabels:
       app: basicweb
   template:
     metadata:
+      # 실제 생성될 파드에 부여할 라벨
       labels:
         app: basicweb
     spec:
+      # 파드 내부 컨테이너 정의 목록
       containers:
+        # 애플리케이션 컨테이너 정의
         - name: basicweb-container
+          # 배포할 도커 이미지(태그 포함)
           image: paykey/basicweb:ab19902ddad450df8a54e99eae4acd229f35afd5
           ports:
+            # 컨테이너가 수신하는 서비스 포트
             - containerPort: 8000 # 컨테이너 내부에서 8000번 포트로 통신

@@ -1,5 +1,9 @@
 :root {
-  /* 색상/그림자 토큰: 화면 분위기를 한 곳에서 관리 */
+  /*
+    전역 디자인 토큰:
+    - 배경/텍스트/강조색을 변수로 관리해 유지보수성을 높임
+    - 테마 변경 시 변수값만 바꾸면 전체 톤 일괄 변경 가능
+  */
   --bg-1: #f4efe6;
   --bg-2: #dde8f5;
   --ink: #1f2a38;
@@ -12,19 +16,25 @@
 }
 
 * {
+  /* 모든 요소의 크기 계산 기준을 border-box로 통일 */
   box-sizing: border-box;
 }
 
 /* 페이지 기본 배경/타이포 */
 body {
+  /* 기본 여백 제거로 레이아웃 예측 가능성 확보 */
   margin: 0;
+  /* 최소 높이를 화면 전체로 유지 */
   min-height: 100vh;
+  /* 한글 가독성이 좋은 폰트 스택 사용 */
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
   color: var(--ink);
+  /* 다층 그라디언트로 은은한 배경 분위기 구성 */
   background:
     radial-gradient(circle at 12% 18%, #ffead2 0%, transparent 30%),
     radial-gradient(circle at 90% 12%, #d8ecff 0%, transparent 34%),
     linear-gradient(145deg, var(--bg-1), var(--bg-2));
+  /* 수평 스크롤 방지 */
   overflow-x: hidden;
 }
 
@@ -54,7 +64,11 @@ body {
 }
 
 .container {
-  /* 전체 콘텐츠 레이아웃 컨테이너 */
+  /*
+    전체 콘텐츠 레이아웃 컨테이너:
+    - 최대 폭 제한으로 긴 줄 가독성 확보
+    - 중앙 정렬 + 카드 간 간격(grid gap) 적용
+  */
   width: min(980px, calc(100% - 2rem));
   margin: 3rem auto;
   display: grid;
@@ -62,6 +76,7 @@ body {
 }
 
 .hero {
+  /* 페이지 진입 시 타이틀 블록에 등장 애니메이션 적용 */
   animation: fade-up 0.6s ease-out;
 }
 
@@ -85,7 +100,11 @@ h1 {
 }
 
 .panel {
-  /* 입력/결과 카드 공통 스타일 */
+  /*
+    입력/결과 카드 공통 스타일:
+    - 반투명 배경 + blur로 유리판 느낌
+    - 얕은 테두리/그림자로 카드 레이어 구분
+  */
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -118,6 +137,7 @@ textarea:focus {
 }
 
 .actions {
+  /* 버튼과 상태 문구를 가로 배치 */
   display: flex;
   gap: 0.8rem;
   align-items: center;
@@ -126,6 +146,7 @@ textarea:focus {
 
 /* 실제 "파일 선택" 버튼 */
 #lectureFile::file-selector-button {
+  /* 브라우저 기본 파일 선택 버튼만 별도로 스타일링 */
   border: none;
   border-radius: 999px;
   padding: 14px 24px; /* 크기 키우기 */
@@ -141,12 +162,13 @@ textarea:focus {
 }
 
 #lectureFile::file-selector-button:hover {
+  /* hover 시 살짝 떠오르는 인터랙션 */
   transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(63, 135, 216, 0.28);
 }
 
 button {
-  /* 요약 실행 버튼 */
+  /* 요약 실행 버튼 공통 스타일 */
   border: none;
   border-radius: 999px;
   padding: 0.62rem 1rem;
@@ -165,12 +187,14 @@ button:hover {
 }
 
 button:disabled {
+  /* 요청 중 비활성 상태 시 시각 피드백 */
   opacity: 0.65;
   cursor: wait;
   transform: none;
 }
 
 .status {
+  /* 진행 상태 메시지(대기/진행/완료/오류) 스타일 */
   color: var(--muted);
   font-size: 0.95rem;
 }
@@ -210,11 +234,13 @@ button:disabled {
   }
 
   .actions {
+    /* 모바일에서는 버튼/상태를 세로로 쌓아 공간 효율 개선 */
     flex-direction: column;
     align-items: flex-start;
   }
 
   button {
+    /* 모바일 버튼 가로폭 확장으로 탭 영역 확보 */
     width: 100%;
   }
 }

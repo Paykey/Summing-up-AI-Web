@@ -1,10 +1,18 @@
+# Docker Compose 버전
 version: "3.8"
 
+# 컨테이너로 실행할 서비스 목록
 services:
+  # FastAPI 애플리케이션 서비스
   app:
+    # 현재 디렉터리의 Dockerfile 기준으로 이미지 빌드
     build: .
-    container_name: my-basicweb
+    # 실행 중 컨테이너 이름 고정
+    container_name: Summing-up-AI-Web
+    # 호스트:컨테이너 포트 매핑 (브라우저는 8000으로 접속)
     ports:
       - "8000:8000"
+    # 컨테이너 내부에서 사용할 환경변수
     environment:
+      # 도커 내부에서 호스트 머신의 로컬 LLM 서버를 참조
       - LOCAL_LLM_ENDPOINT=http://host.docker.internal:11434/api/generate

@@ -1,17 +1,27 @@
+# 워크플로우 표시 이름
 name: Build and Push Docker Image
 
+# 워크플로우 트리거 조건
 on:
   push:
+    # main 브랜치 푸시에서만 실행
     branches: ["main"] # main 브랜치에 코드가 올라올 때만 작동
+    # k8s 경로만 변경된 경우 워크플로우 실행 제외
     paths-ignore: # 무한루프 방지
       - "k8s/**"
+
+# 실행할 작업(job) 목록
 jobs:
+  # 이미지 빌드/푸시 및 배포 파일 업데이트 작업
   build-and-push:
+    # GitHub 호스팅 Ubuntu 러너 사용
     runs-on: ubuntu-latest
 
     permissions:
+      # workflow 내 git commit/push를 위해 저장소 쓰기 권한 필요
       contents: write # 깃허브 저장소에 커밋할 수 있는 권한을 부여 (자동 배포를 위해 필요)
 
+    # 작업 단계(step) 정의
     steps:
       # 1. GitHub에서 최신 코드 가져오기
       - name: Checkout code
@@ -28,8 +38,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
+          # 현재 저장소 루트를 빌드 컨텍스트로 사용
           context: .
+          # 빌드 후 레지스트리로 업로드 활성화
           push: true
+          # 커밋 SHA 기반 태그로 이미지 버전 고유화
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/basicweb:${{ github.sha }}
 
       # 4. GitOps: ArgoCD가 눈치채도록 deployment.yaml 파일 수정 및 푸시
@@ -42,5 +55,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add k8s/deployment.yaml
+          # deployment 파일 변경분만 커밋
           git commit -m "🚀 자동 배포: 이미지 태그 ${{ github.sha }} 로 업데이트"
+          # 원격 main 브랜치로 변경 반영
           git push
