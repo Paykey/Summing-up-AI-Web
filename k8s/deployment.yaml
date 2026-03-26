@@ -21,7 +21,7 @@ spec:
       containers:
         # 애플리케이션 컨테이너 정의
         - name: basicweb-container
-          image: paykey/basicweb:b6d52036c5ec4cc564e19f49b8ff457f462f0f11
+          image: paykey/basicweb:1e7f869beab530e3e28ec5a1e699b37fa88811d5
           ports:
             # 컨테이너가 수신하는 서비스 포트
             - containerPort: 8000 # 컨테이너 내부에서 8000번 포트로 통신
