@@ -21,8 +21,7 @@ spec:
       containers:
         # 애플리케이션 컨테이너 정의
         - name: basicweb-container
-          # 배포할 도커 이미지(태그 포함)
-          image: paykey/basicweb:ab19902ddad450df8a54e99eae4acd229f35afd5
+          image: paykey/basicweb:b6d52036c5ec4cc564e19f49b8ff457f462f0f11
           ports:
             # 컨테이너가 수신하는 서비스 포트
             - containerPort: 8000 # 컨테이너 내부에서 8000번 포트로 통신
